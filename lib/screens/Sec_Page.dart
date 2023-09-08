@@ -1,9 +1,24 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:floewrapp2/screens/Thrd_Page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../Commpont/Custom_Card2.dart';
 import 'Home_Page.dart';
+import 'package:http/http.dart' as http;
+
+Future<List> fetchData() async {
+  final response = await http.get(Uri.parse('https://dummyjson.com/products'));
+  if (response.statusCode == 200) {
+    Map<String, dynamic> data = jsonDecode(response.body);
+    log(data["products"].toString());
+    return data["products"];
+  }
+
+  return [];
+}
 
 class Sec_Page extends StatefulWidget {
   @override
@@ -49,72 +64,98 @@ class _Sec_PageState extends State<Sec_Page> {
                     "Catalog",
                     style: TextStyle(fontSize: 24, fontFamily: "NATS"),
                   ),
-                  SvgPicture.asset("asset/Image/Search.svg")
+                  SvgPicture.asset(
+                    "asset/Image/icon4.svg",
+                  )
                 ],
               ),
             ),
             Container(
-              width: double.infinity,
-              child: Center(
-                child: Wrap(
-                  spacing: 20,
-                  runSpacing: 20,
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      thrd_Page()));
-                        },
-                        child: Custom_Card2()),
-                    InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      thrd_Page()));
-                        },
-                        child: Custom_Card2()),
-                    InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      thrd_Page()));
-                        },
-                        child: Custom_Card2()),
-                    InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      thrd_Page()));
-                        },
-                        child: Custom_Card2()),
-                    InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      thrd_Page()));
-                        },
-                        child: Custom_Card2()),
-                    InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      thrd_Page()));
-                        },
-                        child: Custom_Card2()),
-                  ],
-                ),
-              ),
-            )
+                width: double.infinity,
+                child: FutureBuilder(
+                    future: fetchData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return Wrap(
+                          runSpacing: 30,
+                          spacing: 30,
+                          alignment: WrapAlignment.center,
+                          children:
+                              List.generate(snapshot.data!.length, (index) {
+                            return InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              thrd_Page()));
+                                },
+                                child: Custom_Card2(
+                                  title:
+                                      snapshot.data!.elementAt(index)["title"],
+                                  imageurl: snapshot.data!
+                                      .elementAt(index)["thumbnail"],
+                                ));
+                          }),
+                        );
+                      }
+                      return CircularProgressIndicator();
+                    }))
           ],
         ),
       ),
     );
   }
 }
+
+// Center(
+//                 child: Wrap(
+//                   spacing: 20,
+//                   runSpacing: 20,
+//                   children: [
+
+//                     InkWell(
+//                         onTap: () {
+//                           Navigator.of(context).pushReplacement(
+//                               MaterialPageRoute(
+//                                   builder: (BuildContext context) =>
+//                                       thrd_Page()));
+//                         },
+//                         child: Custom_Card2()),
+//                     InkWell(
+//                         onTap: () {
+//                           Navigator.of(context).pushReplacement(
+//                               MaterialPageRoute(
+//                                   builder: (BuildContext context) =>
+//                                       thrd_Page()));
+//                         },
+//                         child: Custom_Card2()),
+//                     InkWell(
+//                         onTap: () {
+//                           Navigator.of(context).pushReplacement(
+//                               MaterialPageRoute(
+//                                   builder: (BuildContext context) =>
+//                                       thrd_Page()));
+//                         },
+//                         child: Custom_Card2()),
+//                     InkWell(
+//                         onTap: () {
+//                           Navigator.of(context).pushReplacement(
+//                               MaterialPageRoute(
+//                                   builder: (BuildContext context) =>
+//                                       thrd_Page()));
+//                         },
+//                         child: Custom_Card2()),
+//                     InkWell(
+//                         onTap: () {
+//                           Navigator.of(context).pushReplacement(
+//                               MaterialPageRoute(
+//                                   builder: (BuildContext context) =>
+//                                       thrd_Page()));
+//                         },
+//                         child: Custom_Card2()),
+//                   ],
+//                 ),
+//               ),

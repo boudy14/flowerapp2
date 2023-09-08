@@ -29,24 +29,26 @@ class _NaviBarState extends State<NaviBar> {
   //   });
   // }
 
-  final List<Widget> _pages = [HomePage(), Sec_Page()];
+  final pages = [HomePage(), Sec_Page()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         onTap: _navigatorbottomBar,
         items: [
           BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                "asset/Image/house.svg",
-              ),
-              label: "Home"),
+            icon: SvgPicture.asset(
+              "asset/Image/house.svg",
+            ),
+            label: "Home",
+          ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               "asset/Image/Catalog.svg",
+              color: Colors.grey,
             ),
             label: "Catalog",
           ),

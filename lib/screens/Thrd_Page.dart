@@ -18,7 +18,7 @@ class thrd_Page extends StatefulWidget {
 }
 
 class _thrd_PageState extends State<thrd_Page> {
-  int _currentIndex = 1;
+  // int _currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
